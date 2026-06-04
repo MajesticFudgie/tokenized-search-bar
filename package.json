@@ -28,6 +28,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
+    "build:demo": "vite build --config vite.demo.config.ts",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
