@@ -1,0 +1,541 @@
+/* ============================================================
+   Tokenized Search Bar — default stylesheet
+   Import only if you want the built-in styles.
+   Override via CSS custom properties, or omit entirely.
+   ============================================================ */
+
+/* ---- Light theme (default) ---- */
+.tsb {
+  --tsb-bg: #ffffff;
+  --tsb-border: #e2e8f0;
+  --tsb-border-radius: 999px;
+  --tsb-focus-ring: #6366f1;
+  --tsb-font: inherit;
+  --tsb-font-size: 0.875rem;
+  --tsb-padding: 5px 8px;
+  --tsb-gap: 5px;
+  --tsb-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+
+  /* text colour for the main search input — flips with theme */
+  --tsb-color: #1e293b;
+  /* chip label/value text — stays dark because chip backgrounds are always bright */
+  --tsb-chip-text: #1e1b4b;
+  --tsb-chip-border-radius: 999px;
+  --tsb-chip-input-bg: rgba(255,255,255,0.5);
+  --tsb-chip-input-border-radius: 10px;
+  --tsb-chip-gradient: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 65%);
+
+  --tsb-input-placeholder: #94a3b8;
+
+  --tsb-dropdown-bg: #ffffff;
+  --tsb-dropdown-border: #e2e8f0;
+  --tsb-dropdown-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.06);
+  --tsb-dropdown-hover: #f8fafc;
+  --tsb-dropdown-highlight: #eef2ff;
+  --tsb-dropdown-highlight-text: #4338ca;
+  --tsb-dropdown-border-radius: 14px;
+
+  --tsb-search-btn-bg: #6366f1;
+  --tsb-search-btn-hover: #4f46e5;
+  --tsb-search-btn-text: #ffffff;
+  --tsb-search-btn-border-radius: 999px;
+
+  --tsb-remove-btn-text: rgba(0,0,0,0.55);
+  --tsb-remove-btn-hover-bg: rgba(0,0,0,0.12);
+  --tsb-remove-btn-hover-text: rgba(0,0,0,0.85);
+
+  --tsb-disabled-opacity: 0.45;
+}
+
+/* ---- Dark theme ---- */
+.tsb[data-theme="dark"] {
+  --tsb-bg: #1e1e2e;
+  --tsb-border: #313244;
+  --tsb-focus-ring: #818cf8;
+  --tsb-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+
+  --tsb-color: #e2e8f0;
+  /* chip-text intentionally NOT overridden — chip backgrounds are bright, dark text always reads better */
+  --tsb-chip-input-bg: rgba(255,255,255,0.45);
+  --tsb-chip-gradient: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 65%);
+
+  --tsb-input-placeholder: #64748b;
+
+  --tsb-dropdown-bg: #2a2a3e;
+  --tsb-dropdown-border: #3f3f5a;
+  --tsb-dropdown-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.3);
+  --tsb-dropdown-hover: #313150;
+  --tsb-dropdown-highlight: #3730a3;
+  --tsb-dropdown-highlight-text: #c7d2fe;
+
+  --tsb-search-btn-bg: #6366f1;
+  --tsb-search-btn-hover: #818cf8;
+
+  /* remove-btn intentionally NOT overridden — chip backgrounds are bright, dark button always reads better */
+}
+
+/* ---- Auto theme — follow OS preference ---- */
+@media (prefers-color-scheme: dark) {
+  .tsb[data-theme="auto"] {
+    --tsb-bg: #1e1e2e;
+    --tsb-border: #313244;
+    --tsb-focus-ring: #818cf8;
+    --tsb-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+
+    --tsb-color: #e2e8f0;
+    --tsb-chip-input-bg: rgba(255,255,255,0.45);
+    --tsb-chip-gradient: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 65%);
+
+    --tsb-input-placeholder: #64748b;
+
+    --tsb-dropdown-bg: #2a2a3e;
+    --tsb-dropdown-border: #3f3f5a;
+    --tsb-dropdown-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.3);
+    --tsb-dropdown-hover: #313150;
+    --tsb-dropdown-highlight: #3730a3;
+    --tsb-dropdown-highlight-text: #c7d2fe;
+
+    --tsb-search-btn-bg: #6366f1;
+    --tsb-search-btn-hover: #818cf8;
+
+    /* remove-btn intentionally NOT overridden — chip backgrounds are bright, dark button always reads better */
+  }
+}
+
+/* ---- Root ---- */
+
+.tsb {
+  display: flex;
+  align-items: stretch;
+  font-family: var(--tsb-font);
+  font-size: var(--tsb-font-size);
+  border: 1px solid var(--tsb-border);
+  border-radius: var(--tsb-border-radius);
+  background: var(--tsb-bg);
+  box-shadow: var(--tsb-shadow);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  color: var(--tsb-color);
+}
+
+.tsb:focus-within {
+  border-color: var(--tsb-focus-ring);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tsb-focus-ring) 25%, transparent),
+              var(--tsb-shadow);
+}
+
+.tsb--disabled {
+  opacity: var(--tsb-disabled-opacity);
+  pointer-events: none;
+}
+
+/* ---- Inner row (chips + main input) ---- */
+
+.tsb__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--tsb-gap);
+  flex: 1;
+  min-width: 0;
+  padding: var(--tsb-padding);
+  cursor: text;
+  position: relative;
+}
+
+/* ---- Main typeahead input ---- */
+
+.tsb__input-sizer {
+  display: inline-grid;
+  flex: 1;
+  min-width: 60px;
+  max-width: 100%;
+}
+
+.tsb__input-sizer::after {
+  content: attr(data-value) ' ';
+  visibility: hidden;
+  white-space: pre;
+  grid-area: 1 / 1;
+  padding: 2px 0;
+  font: inherit;
+  font-size: var(--tsb-font-size);
+}
+
+.tsb__input {
+  grid-area: 1 / 1;
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: var(--tsb-font-size);
+  color: inherit;
+  padding: 2px 0;
+}
+
+.tsb__input::placeholder {
+  color: var(--tsb-input-placeholder);
+}
+
+/* ---- Search button ---- */
+
+.tsb__search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin: 4px 4px 0 0;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--tsb-input-placeholder);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.tsb__search-btn:hover {
+  background: color-mix(in srgb, var(--tsb-focus-ring) 12%, transparent);
+  color: var(--tsb-focus-ring);
+}
+
+.tsb__search-btn:focus-visible {
+  outline: 2px solid var(--tsb-focus-ring);
+  outline-offset: 1px;
+}
+
+/* ---- Chip ---- */
+
+.tsb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 5px 0 9px;
+  background: var(--tsb-chip-bg, #c7d2fe);
+  background-image: var(--tsb-chip-gradient);
+  color: var(--tsb-chip-text);
+  border-radius: var(--tsb-chip-border-radius);
+  flex-shrink: 0;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.tsb-chip__label {
+  font-weight: 700;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  user-select: none;
+  letter-spacing: 0.01em;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ---- Chip inputs ---- */
+
+.tsb-chip__input-sizer {
+  display: inline-grid;
+  min-width: 16px;
+  max-width: 280px;
+  overflow: hidden;
+}
+
+.tsb-chip__input-sizer::after {
+  content: attr(data-value) ' ';
+  visibility: hidden;
+  white-space: pre;
+  grid-area: 1 / 1;
+  padding: 0 7px;
+  height: 20px;
+  font: inherit;
+  font-size: var(--tsb-font-size);
+}
+
+.tsb-chip__input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: var(--tsb-font-size);
+  color: inherit;
+  padding: 0 7px;
+  height: 20px;
+  min-width: 0;
+  width: 100%;
+  border-radius: var(--tsb-chip-input-border-radius);
+}
+
+.tsb-chip__input-sizer .tsb-chip__input {
+  grid-area: 1 / 1;
+  background: var(--tsb-chip-input-bg);
+}
+
+/* ---- Number — hide browser spinners so sizer width is accurate ---- */
+
+.tsb-chip__input--number::-webkit-inner-spin-button,
+.tsb-chip__input--number::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.tsb-chip__input--number {
+  -moz-appearance: textfield;
+}
+
+/* ---- Boolean toggle ---- */
+
+.tsb-chip__toggle {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.tsb-chip__toggle-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.tsb-chip__toggle-track {
+  position: relative;
+  width: 28px;
+  height: 16px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.tsb-chip__toggle-input:checked + .tsb-chip__toggle-track {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.tsb-chip__toggle-thumb {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform 0.18s;
+}
+
+.tsb-chip__toggle-input:checked + .tsb-chip__toggle-track .tsb-chip__toggle-thumb {
+  transform: translateX(12px);
+}
+
+.tsb-chip__input--colour-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 7px 0 4px;
+  height: 20px;
+  background: var(--tsb-chip-input-bg);
+  border-radius: var(--tsb-chip-input-border-radius);
+  cursor: pointer;
+}
+
+.tsb-chip__colour-swatch {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border: none;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.tsb-chip__colour-swatch::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 50%;
+}
+
+.tsb-chip__colour-swatch::-webkit-color-swatch {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+}
+
+.tsb-chip__colour-swatch::-moz-color-swatch {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+}
+
+.tsb-chip__colour-hex {
+  font-family: monospace;
+  font-size: 0.78em;
+  opacity: 0.7;
+  letter-spacing: 0.03em;
+}
+
+/* ---- Chip suffix (e.g. "KB", "ms") ---- */
+
+.tsb-chip__suffix {
+  font-size: 0.78rem;
+  font-weight: 600;
+  opacity: 0.75;
+  white-space: nowrap;
+  user-select: none;
+  padding-right: 2px;
+}
+
+/* ---- Chip remove button ---- */
+
+.tsb-chip__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--tsb-remove-btn-text);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.1s, color 0.1s;
+}
+
+.tsb-chip__remove:hover {
+  background: var(--tsb-remove-btn-hover-bg);
+  color: var(--tsb-remove-btn-hover-text);
+}
+
+/* ---- Custom select ---- */
+
+.tsb-chip__select {
+  position: relative;
+  display: inline-flex;
+}
+
+.tsb-chip__select-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 5px 0 7px;
+  height: 20px;
+  border: none;
+  border-radius: var(--tsb-chip-input-border-radius);
+  background: var(--tsb-chip-input-bg);
+  color: inherit;
+  font: inherit;
+  font-size: var(--tsb-font-size);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tsb-chip__select-trigger:focus-visible {
+  outline: 2px solid var(--tsb-focus-ring);
+  outline-offset: 1px;
+}
+
+.tsb-chip__select-chevron {
+  opacity: 0.5;
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+
+.tsb-chip__select-chevron--open {
+  transform: rotate(180deg);
+}
+
+.tsb-chip__select-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 1001;
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  min-width: 100%;
+  background: var(--tsb-dropdown-bg);
+  border: 1px solid var(--tsb-dropdown-border);
+  border-radius: var(--tsb-dropdown-border-radius);
+  box-shadow: var(--tsb-dropdown-shadow);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.tsb-chip__select-option {
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--tsb-font-size);
+  color: var(--tsb-color);
+  white-space: nowrap;
+  transition: background 0.1s;
+}
+
+.tsb-chip__select-option--highlighted {
+  background: var(--tsb-dropdown-hover);
+}
+
+.tsb-chip__select-option--selected {
+  font-weight: 600;
+  color: var(--tsb-dropdown-highlight-text);
+}
+
+.tsb-chip__select-option--highlighted.tsb-chip__select-option--selected {
+  background: var(--tsb-dropdown-highlight);
+}
+
+/* ---- Suggestion dropdown ---- */
+
+.tsb-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  list-style: none;
+  margin: 0;
+  padding: 5px;
+  background: var(--tsb-dropdown-bg);
+  border: 1px solid var(--tsb-dropdown-border);
+  border-radius: var(--tsb-dropdown-border-radius);
+  box-shadow: var(--tsb-dropdown-shadow);
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.tsb-dropdown__item {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.tsb-dropdown__item:hover {
+  background: var(--tsb-dropdown-hover);
+}
+
+.tsb-dropdown__item--highlighted {
+  background: var(--tsb-dropdown-highlight);
+  color: var(--tsb-dropdown-highlight-text);
+}
+
+.tsb-dropdown__label {
+  font-weight: 600;
+}
+
+.tsb-dropdown__description {
+  font-size: 0.8em;
+  opacity: 0.65;
+  margin-top: 2px;
+}
