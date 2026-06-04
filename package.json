@@ -1,6 +1,6 @@
 {
   "name": "@majesticfudgie/tokenized-search-bar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A tokenized search bar component for React",
   "license": "MIT",
   "keywords": ["react", "search", "tokenized", "chips", "filter", "typeahead", "component", "ui"],

@@ -8,7 +8,7 @@
 .tsb {
   --tsb-bg: #ffffff;
   --tsb-border: #e2e8f0;
-  --tsb-border-radius: 999px;
+  --tsb-border-radius: 14px;
   --tsb-focus-ring: #6366f1;
   --tsb-font: inherit;
   --tsb-font-size: 0.875rem;

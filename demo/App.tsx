@@ -286,18 +286,50 @@ export default function App() {
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: isDark ? '#e2e8f0' : '#0f172a', marginBottom: 4, marginTop: 0 }}>
             Documentation
           </h2>
-          <p style={{ color: isDark ? '#64748b' : '#64748b', fontSize: '0.875rem', marginTop: 0, marginBottom: 40 }}>
+          <p style={{ color: isDark ? '#64748b' : '#64748b', fontSize: '0.875rem', marginTop: 0, marginBottom: 20 }}>
             A fully typesafe, styleable tokenized search bar for React. Zero runtime dependencies.
           </p>
 
+          {/* Table of contents */}
+          <nav style={{
+            display: 'flex', flexWrap: 'wrap', gap: '6px 4px', marginBottom: 40,
+            padding: '14px 16px', borderRadius: 10,
+            background: isDark ? '#0f0f1a' : '#f8fafc',
+            border: `1px solid ${isDark ? '#1e293b' : '#e2e8f0'}`,
+          }}>
+            {[
+              ['Installation', 'installation'],
+              ['Quick Start', 'quick-start'],
+              ['Locked Tokens', 'locked-tokens'],
+              ['Component Props', 'component-props'],
+              ['TokenDefinition', 'tokendefinition-fields'],
+              ['ActiveToken', 'activetoken-shape'],
+              ['CSS Custom Properties', 'css-custom-properties'],
+            ].map(([label, id]) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                style={{
+                  padding: '3px 10px', borderRadius: 999,
+                  fontSize: '0.78rem', fontWeight: 500, textDecoration: 'none',
+                  background: isDark ? '#1e1e2e' : '#fff',
+                  border: `1px solid ${isDark ? '#313244' : '#e2e8f0'}`,
+                  color: isDark ? '#818cf8' : '#4338ca',
+                }}
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+
           {/* Installation */}
-          <DocSection heading="Installation" isDark={isDark}>
+          <DocSection id="installation" heading="Installation" isDark={isDark}>
             <pre style={preStyle}>{'npm install @majesticfudgie/tokenized-search-bar'}</pre>
             <pre style={{ ...preStyle, marginTop: 8 }}>{'yarn add @majesticfudgie/tokenized-search-bar'}</pre>
           </DocSection>
 
           {/* Quick Start */}
-          <DocSection heading="Quick Start" isDark={isDark}>
+          <DocSection id="quick-start" heading="Quick Start" isDark={isDark}>
             <pre style={preStyle}>{`import { useState } from 'react'
 import { TokenizedSearchBar } from '@majesticfudgie/tokenized-search-bar'
 import '@majesticfudgie/tokenized-search-bar/dist/index.css'
@@ -326,7 +358,7 @@ export default function Search() {
           </DocSection>
 
           {/* Pre-populating a locked token */}
-          <DocSection heading="Pre-populating a Locked Token" isDark={isDark}>
+          <DocSection id="locked-tokens" heading="Pre-populating a Locked Token" isDark={isDark}>
             <p style={docBodyStyle(isDark)}>
               Pass a token with <Code isDark={isDark}>locked: true</Code> via <Code isDark={isDark}>value</Code> or <Code isDark={isDark}>defaultValue</Code>.
               A locked token renders with no × button and cannot be dismissed with Escape — it can only be edited.
@@ -342,7 +374,7 @@ export default function Search() {
           </DocSection>
 
           {/* Component Props */}
-          <DocSection heading="Component Props" isDark={isDark}>
+          <DocSection id="component-props" heading="Component Props" isDark={isDark}>
             <ApiTable isDark={isDark} rows={[
               ['tokenDefinitions', 'TokenDefinition[]', 'Yes', 'Tokens available for the user to pick from'],
               ['value', 'ActiveToken[]', '—', 'Controlled list of active tokens'],
@@ -357,7 +389,7 @@ export default function Search() {
           </DocSection>
 
           {/* TokenDefinition */}
-          <DocSection heading="TokenDefinition Fields" isDark={isDark}>
+          <DocSection id="tokendefinition-fields" heading="TokenDefinition Fields" isDark={isDark}>
             <ApiTable isDark={isDark} rows={[
               ['slug', 'string', 'Yes', 'Unique identifier — returned in onChange / onSearch results'],
               ['label', 'string', 'Yes', 'Displayed on the chip and in the suggestion dropdown'],
@@ -374,7 +406,7 @@ export default function Search() {
           </DocSection>
 
           {/* ActiveToken */}
-          <DocSection heading="ActiveToken Shape" isDark={isDark}>
+          <DocSection id="activetoken-shape" heading="ActiveToken Shape" isDark={isDark}>
             <p style={docBodyStyle(isDark)}>This is the shape of each item in the <Code isDark={isDark}>value</Code> / <Code isDark={isDark}>onChange</Code> array.</p>
             <ApiTable isDark={isDark} rows={[
               ['id', 'string', 'Yes', 'Stable ID — generated automatically when a token is added'],
@@ -385,7 +417,7 @@ export default function Search() {
           </DocSection>
 
           {/* CSS Custom Properties */}
-          <DocSection heading="CSS Custom Properties" isDark={isDark}>
+          <DocSection id="css-custom-properties" heading="CSS Custom Properties" isDark={isDark}>
             <p style={docBodyStyle(isDark)}>
               Import <Code isDark={isDark}>@majesticfudgie/tokenized-search-bar/dist/index.css</Code> for default styles,
               then override any variable on the <Code isDark={isDark}>.tsb</Code> root element or a parent selector.
@@ -393,7 +425,7 @@ export default function Search() {
             <pre style={preStyle}>{`.my-search-bar {
   --tsb-bg:                    #ffffff;
   --tsb-border:                #e2e8f0;
-  --tsb-border-radius:         999px;      /* pill bar */
+  --tsb-border-radius:         14px;       /* fixed radius — stays consistent as bar grows */
   --tsb-focus-ring:            #6366f1;
   --tsb-color:                 #1e293b;    /* main input text */
   --tsb-font:                  inherit;
@@ -430,11 +462,14 @@ export default function Search() {
 
 /* ---- Documentation helpers ---- */
 
-function DocSection({ heading, isDark, children }: { heading: string; isDark: boolean; children: React.ReactNode }) {
+function DocSection({ id, heading, isDark, children }: { id: string; heading: string; isDark: boolean; children: React.ReactNode }) {
   return (
-    <section style={{ marginBottom: 40 }}>
+    <section id={id} style={{ marginBottom: 40, scrollMarginTop: 16 }}>
       <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: isDark ? '#c7d2fe' : '#4338ca', marginBottom: 12, marginTop: 0, letterSpacing: '0.01em' }}>
-        {heading}
+        <a href={`#${id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+          {heading}
+          <span style={{ marginLeft: 8, opacity: 0.35, fontWeight: 400, fontSize: '0.85em' }}>#</span>
+        </a>
       </h3>
       {children}
     </section>

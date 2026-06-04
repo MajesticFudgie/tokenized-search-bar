@@ -141,7 +141,7 @@ Override any variable on `.tsb` (the root element) or a parent selector:
 .my-search-bar {
   --tsb-bg:                       #ffffff;
   --tsb-border:                   #e2e8f0;
-  --tsb-border-radius:            999px;
+  --tsb-border-radius:            14px;
   --tsb-focus-ring:               #6366f1;
   --tsb-color:                    #1e293b;
   --tsb-font:                     inherit;
