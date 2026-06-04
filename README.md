@@ -95,6 +95,7 @@ const [tokens, setTokens] = useState<ActiveToken[]>([
 | `placeholder` | `string` | `'Search…'` | Placeholder for the main typeahead input |
 | `className` | `string` | — | Extra class applied to the root element |
 | `disabled` | `boolean` | `false` | Disables all interaction |
+| `freeText` | `boolean \| string` | — | Enable freetext tokens. `true` uses slug `'search'`; pass a string for a custom slug. Only one freetext token at a time. |
 
 ---
 
@@ -114,6 +115,23 @@ const [tokens, setTokens] = useState<ActiveToken[]>([
 | `multiple` | `boolean` | — | Allow this token to be added more than once |
 | `min` | `number \| string` | — | Min constraint for `'number'` and `'date'` types |
 | `max` | `number \| string` | — | Max constraint for `'number'` and `'date'` types |
+
+---
+
+## SearchResult Shape
+
+`onSearch` receives a discriminated union keyed on `type`, so value types narrow correctly:
+
+```ts
+type SearchResult =
+  | { slug: string; type: 'text';     value: string }
+  | { slug: string; type: 'number';   value: number }
+  | { slug: string; type: 'date';     value: string }
+  | { slug: string; type: 'colour';   value: string }
+  | { slug: string; type: 'boolean';  value: boolean }
+  | { slug: string; type: 'select';   value: string }
+  | {               type: 'freetext'; value: string }  // no slug
+```
 
 ---
 

@@ -224,6 +224,14 @@
   box-sizing: border-box;
 }
 
+.tsb-chip--freetext {
+  background: transparent;
+  background-image: none;
+  border: 1px solid var(--tsb-border);
+  color: var(--tsb-color);
+  padding-left: 5px;
+}
+
 .tsb-chip__label {
   font-weight: 700;
   font-size: 0.8rem;
@@ -283,6 +291,57 @@
 
 .tsb-chip__input--number {
   -moz-appearance: textfield;
+  background: var(--tsb-chip-input-bg);
+  border-radius: var(--tsb-chip-input-border-radius);
+}
+
+/* ---- Date input ---- */
+
+.tsb-chip__input--date {
+  background: var(--tsb-chip-input-bg);
+  border-radius: var(--tsb-chip-input-border-radius);
+  color-scheme: light;
+  width: auto;
+  cursor: pointer;
+  padding-right: 5px;
+}
+
+.tsb[data-theme="dark"] .tsb-chip__input--date,
+.tsb[data-theme="auto"] .tsb-chip__input--date {
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tsb[data-theme="auto"] .tsb-chip__input--date {
+    color-scheme: dark;
+  }
+}
+
+.tsb-chip__input--date::-webkit-datetime-edit {
+  padding: 0;
+  font-size: var(--tsb-font-size);
+}
+
+.tsb-chip__input--date::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+.tsb-chip__input--date::-webkit-datetime-edit-text {
+  opacity: 0.4;
+  padding: 0 1px;
+}
+
+.tsb-chip__input--date::-webkit-calendar-picker-indicator {
+  opacity: 0.35;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  width: 12px;
+  height: 12px;
+}
+
+.tsb-chip__input--date::-webkit-calendar-picker-indicator:hover {
+  opacity: 0.7;
 }
 
 /* ---- Boolean toggle ---- */
@@ -407,6 +466,7 @@
   line-height: 1;
   padding: 0;
   flex-shrink: 0;
+  margin-top: 1px;
   transition: background 0.1s, color 0.1s;
 }
 

@@ -15,7 +15,13 @@ export function TokenizedSearchBar({
   className,
   disabled,
   theme,
+  freeText,
 }: TokenizedSearchBarProps) {
+  const freeTextSlug = freeText === true ? 'search' : typeof freeText === 'string' ? freeText : null
+  const freeTextDef: import('../types').TokenDefinition | null = freeTextSlug
+    ? { slug: freeTextSlug, label: '', type: 'text' }
+    : null
+  const allDefs = freeTextDef ? [...tokenDefinitions, freeTextDef] : tokenDefinitions
   const { tokens, addToken, removeToken, updateToken, removeEmpty } = useTokenState({
     value,
     defaultValue,
@@ -33,7 +39,18 @@ export function TokenizedSearchBar({
   const isOpen = open && suggestions.length > 0
 
   function buildResults(): SearchResult[] {
-    return tokens.map(({ slug, value: v }) => ({ slug, value: v }))
+    return tokens.flatMap((token): SearchResult[] => {
+      if (token.slug === freeTextSlug) {
+        return [{ type: 'freetext' as const, value: token.value as string }]
+      }
+      const def = allDefs.find((d) => d.slug === token.slug)
+      if (!def) return []
+      switch (def.type) {
+        case 'boolean': return [{ slug: token.slug, type: 'boolean' as const, value: token.value as boolean }]
+        case 'number':  return [{ slug: token.slug, type: 'number'  as const, value: token.value as number }]
+        default:        return [{ slug: token.slug, type: def.type,            value: token.value as string }]
+      }
+    })
   }
 
   function triggerSearch() {
@@ -70,7 +87,11 @@ export function TokenizedSearchBar({
       e.preventDefault()
       if (isOpen && suggestions[highlightedIndex]) {
         selectSuggestion(suggestions[highlightedIndex])
-      } else if (!isOpen) {
+      } else if (freeTextSlug && query.trim() && !tokens.some((t) => t.slug === freeTextSlug)) {
+        addToken(freeTextSlug, query.trim())
+        clearQuery()
+        setOpen(false)
+      } else {
         triggerSearch()
       }
       return
@@ -123,7 +144,7 @@ export function TokenizedSearchBar({
         }}
       >
         {tokens.map((token) => {
-          const def = tokenDefinitions.find((d) => d.slug === token.slug)
+          const def = allDefs.find((d) => d.slug === token.slug)
           if (!def) return null
           return (
             <TokenChip

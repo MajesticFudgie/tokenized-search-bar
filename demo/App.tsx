@@ -180,6 +180,7 @@ export default function App() {
           onSearch={setLastSearch}
           placeholder="Add a search filter…"
           theme={theme}
+          freeText
         />
 
         <div style={{ display: 'flex', gap: 12, marginTop: 16, alignItems: 'center' }}>
@@ -304,7 +305,9 @@ export default function App() {
               ['Installation', 'installation'],
               ['Quick Start', 'quick-start'],
               ['Locked Tokens', 'locked-tokens'],
+              ['Freetext Search', 'freetext-search'],
               ['Component Props', 'component-props'],
+              ['SearchResult', 'search-result-shape'],
               ['TokenDefinition', 'tokendefinition-fields'],
               ['ActiveToken', 'activetoken-shape'],
               ['CSS Custom Properties', 'css-custom-properties'],
@@ -376,6 +379,65 @@ export default function Search() {
 ])`}</pre>
           </DocSection>
 
+          {/* Freetext search */}
+          <DocSection id="freetext-search" heading="Freetext Search" isDark={isDark}>
+            <p style={docBodyStyle(isDark)}>
+              Pass the <Code isDark={isDark}>freeText</Code> prop to let users type arbitrary search terms
+              without selecting a token from the dropdown. When enabled, typing in the main input and pressing{' '}
+              <Code isDark={isDark}>Enter</Code> creates a plain chip with no label or background colour.
+              Only one freetext chip exists at a time — once it's present, Enter triggers a search instead.
+            </p>
+            <pre style={preStyle}>{`// Use the default slug ('search')
+<TokenizedSearchBar freeText tokenDefinitions={defs} ... />
+
+// Use a custom slug
+<TokenizedSearchBar freeText="query" tokenDefinitions={defs} ... />`}</pre>
+
+            <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: isDark ? '#94a3b8' : '#6b7280', marginBottom: 8, marginTop: 16 }}>Behaviour</h4>
+            <ul style={{ ...docBodyStyle(isDark), paddingLeft: 20, margin: 0 }}>
+              <li style={{ marginBottom: 4 }}>Type text → press <Code isDark={isDark}>Enter</Code> with no suggestion selected → freetext chip is created</li>
+              <li style={{ marginBottom: 4 }}>The chip shows the typed text with an × but no label and no coloured background</li>
+              <li style={{ marginBottom: 4 }}>Only one freetext chip is allowed — pressing Enter again triggers search rather than adding a second</li>
+              <li style={{ marginBottom: 4 }}>The chip can be edited and removed like any other chip</li>
+              <li>Removing an empty freetext chip on blur or Escape works as normal</li>
+            </ul>
+
+            <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: isDark ? '#94a3b8' : '#6b7280', marginBottom: 8, marginTop: 16 }}>In onSearch results</h4>
+            <p style={docBodyStyle(isDark)}>
+              Freetext tokens appear in <Code isDark={isDark}>onSearch</Code> results with{' '}
+              <Code isDark={isDark}>type: 'freetext'</Code> and <strong>no slug</strong>, making them easy to
+              distinguish from structured token results:
+            </p>
+            <pre style={preStyle}>{`onSearch={(results) => {
+  results.forEach((r) => {
+    if (r.type === 'freetext') {
+      // r.value is the raw search string, no r.slug
+      console.log('freetext:', r.value)
+    } else {
+      // r.slug, r.type, r.value are all present
+      console.log(r.slug, r.type, r.value)
+    }
+  })
+}}`}</pre>
+          </DocSection>
+
+          {/* SearchResult shape */}
+          <DocSection id="search-result-shape" heading="SearchResult Shape" isDark={isDark}>
+            <p style={docBodyStyle(isDark)}>
+              <Code isDark={isDark}>onSearch</Code> receives a discriminated union keyed on{' '}
+              <Code isDark={isDark}>type</Code>. Narrowing on <Code isDark={isDark}>type</Code> gives you the
+              correctly typed <Code isDark={isDark}>value</Code> — no casting required.
+            </p>
+            <pre style={preStyle}>{`type SearchResult =
+  | { slug: string; type: 'text';     value: string  }
+  | { slug: string; type: 'number';   value: number  }
+  | { slug: string; type: 'date';     value: string  }
+  | { slug: string; type: 'colour';   value: string  }
+  | { slug: string; type: 'boolean';  value: boolean }
+  | { slug: string; type: 'select';   value: string  }
+  | {               type: 'freetext'; value: string  } // no slug`}</pre>
+          </DocSection>
+
           {/* Component Props */}
           <DocSection id="component-props" heading="Component Props" isDark={isDark}>
             <ApiTable isDark={isDark} rows={[
@@ -388,6 +450,7 @@ export default function Search() {
               ['placeholder', 'string', "'Search…'", 'Placeholder for the main typeahead input'],
               ['className', 'string', '—', 'Extra class applied to the root element for custom styles'],
               ['disabled', 'boolean', 'false', 'Disables all interaction'],
+              ['freeText', 'boolean | string', '—', "Enable freetext tokens. true uses slug 'search'; pass a string for a custom slug. Only one at a time."],
             ]} />
           </DocSection>
 

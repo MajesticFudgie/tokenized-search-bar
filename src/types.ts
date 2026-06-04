@@ -38,10 +38,14 @@ export interface ActiveToken {
   locked?: boolean
 }
 
-export interface SearchResult {
-  slug: string
-  value: string | number | boolean
-}
+export type SearchResult =
+  | { slug: string; type: 'text';    value: string }
+  | { slug: string; type: 'number';  value: number }
+  | { slug: string; type: 'date';    value: string }
+  | { slug: string; type: 'colour';  value: string }
+  | { slug: string; type: 'boolean'; value: boolean }
+  | { slug: string; type: 'select';  value: string }
+  | {               type: 'freetext';value: string }
 
 export type Theme = 'light' | 'dark' | 'auto'
 
@@ -64,4 +68,10 @@ export interface TokenizedSearchBarProps {
   className?: string
   /** Disables all interaction */
   disabled?: boolean
+  /**
+   * Enable freetext search tokens. When the user types and presses Enter without
+   * selecting a suggestion, a plain chip is created with this slug.
+   * Pass true to use the slug 'search', or a string for a custom slug.
+   */
+  freeText?: boolean | string
 }

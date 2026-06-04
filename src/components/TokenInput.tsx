@@ -54,7 +54,7 @@ export function TokenInput({
 
     case 'number': {
       const numStr = value !== '' && !isNaN(value as number) ? String(value) : ''
-      const numWidth = `${Math.max(2, numStr.length + 1)}ch`
+      const numWidth = `calc(${Math.max(1, numStr.length || 1)}ch + 16px)`
       return (
         <input
           {...sharedProps}
@@ -77,6 +77,7 @@ export function TokenInput({
           {...sharedProps}
           ref={inputRef as React.RefObject<HTMLInputElement>}
           type="date"
+          className="tsb-chip__input tsb-chip__input--date"
           value={value as string}
           min={definition.min}
           max={definition.max}

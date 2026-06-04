@@ -26,9 +26,12 @@ export function TokenChip({
   const [focused, setFocused] = useState(false)
   const chipRef = useRef<HTMLSpanElement>(null)
 
-  const chipStyle: React.CSSProperties = definition.colour
-    ? { backgroundColor: definition.colour }
-    : {}
+  const isFreetext = definition.label === ''
+  const chipStyle: React.CSSProperties = isFreetext
+    ? {}
+    : definition.colour
+      ? { backgroundColor: definition.colour }
+      : {}
 
   function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === 'Enter') {
@@ -73,13 +76,13 @@ export function TokenChip({
   return (
     <span
       ref={chipRef}
-      className={`tsb-chip${focused ? ' tsb-chip--focused' : ''}${token.locked ? ' tsb-chip--locked' : ''}`}
+      className={`tsb-chip${isFreetext ? ' tsb-chip--freetext' : ''}${focused ? ' tsb-chip--focused' : ''}${token.locked ? ' tsb-chip--locked' : ''}`}
       style={chipStyle}
       onFocus={handleFocus}
       onBlur={handleBlur}
     >
-      <span className="tsb-chip__label">{definition.label}</span>
-      <span className="tsb-chip__separator" aria-hidden="true" />
+      {!isFreetext && <span className="tsb-chip__label">{definition.label}</span>}
+      {!isFreetext && <span className="tsb-chip__separator" aria-hidden="true" />}
       <TokenInput
         definition={definition}
         value={token.value}
