@@ -23,6 +23,8 @@ export interface TokenDefinition {
   max?: number | string
   /** Optional suffix displayed after the input, e.g. "KB" or "ms" */
   suffix?: string
+  /** Extra search terms that surface this token even when they don't match the label */
+  keywords?: string[]
 }
 
 export interface ActiveToken {

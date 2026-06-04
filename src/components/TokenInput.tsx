@@ -52,23 +52,24 @@ export function TokenInput({
         </label>
       )
 
-    case 'number':
+    case 'number': {
+      const numStr = value !== '' && !isNaN(value as number) ? String(value) : ''
+      const numWidth = `${Math.max(2, numStr.length + 1)}ch`
       return (
-        <span className="tsb-chip__input-sizer" data-value={String(value !== '' && !isNaN(value as number) ? value : ' ')}>
-          <input
-            {...sharedProps}
-            ref={inputRef as React.RefObject<HTMLInputElement>}
-            type="number"
-            className="tsb-chip__input tsb-chip__input--number"
-            size={1}
-            value={value as number}
-            placeholder={definition.placeholder}
-            min={definition.min}
-            max={definition.max}
-            onChange={(e) => onChange(e.target.valueAsNumber)}
-          />
-        </span>
+        <input
+          {...sharedProps}
+          ref={inputRef as React.RefObject<HTMLInputElement>}
+          type="number"
+          className="tsb-chip__input tsb-chip__input--number"
+          style={{ width: numWidth }}
+          value={value as number}
+          placeholder={definition.placeholder}
+          min={definition.min}
+          max={definition.max}
+          onChange={(e) => onChange(e.target.valueAsNumber)}
+        />
       )
+    }
 
     case 'date':
       return (

@@ -80,6 +80,7 @@ const EMAIL_TOKENS: TokenDefinition[] = [
     placeholder: '0',
     min: 0,
     suffix: 'KB',
+    keywords: ['kb', 'kilobytes', 'bytes', 'large', 'attachment size'],
   },
   {
     slug: 'label',
@@ -95,6 +96,7 @@ const EMAIL_TOKENS: TokenDefinition[] = [
     description: 'Emails highlighted with this colour',
     colour: '#f0abfc',
     type: 'colour',
+    keywords: ['color', 'colour', 'tag color', 'flag'],
   },
 ]
 
@@ -228,7 +230,7 @@ export default function App() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem', color: isDark ? '#94a3b8' : '#374151' }}>
               <thead>
                 <tr style={{ background: isDark ? '#1e1e2e' : '#f8fafc', borderBottom: `1px solid ${isDark ? '#1e293b' : '#e2e8f0'}` }}>
-                  {(['slug', 'label', 'type', 'description', 'colour', 'placeholder', 'options', 'multiple', 'min', 'max', 'suffix'] as const).map((col) => (
+                  {(['slug', 'label', 'type', 'description', 'colour', 'placeholder', 'options', 'multiple', 'min', 'max', 'suffix', 'keywords'] as const).map((col) => (
                     <th key={col} style={{ padding: '7px 12px', textAlign: 'left', fontWeight: 600, color: isDark ? '#475569' : '#6b7280', whiteSpace: 'nowrap' }}>
                       {col}
                     </th>
@@ -273,6 +275,7 @@ export default function App() {
                     <td style={{ padding: '7px 12px', fontFamily: 'monospace' }}>{def.min ?? <em style={{ opacity: 0.4 }}>—</em>}</td>
                     <td style={{ padding: '7px 12px', fontFamily: 'monospace' }}>{def.max ?? <em style={{ opacity: 0.4 }}>—</em>}</td>
                     <td style={{ padding: '7px 12px', fontFamily: 'monospace', color: '#0891b2' }}>{def.suffix ?? <em style={{ opacity: 0.4 }}>—</em>}</td>
+                    <td style={{ padding: '7px 12px', fontSize: '0.72rem', color: isDark ? '#64748b' : '#6b7280' }}>{def.keywords ? def.keywords.join(', ') : <em style={{ opacity: 0.4 }}>—</em>}</td>
                   </tr>
                 ))}
               </tbody>
@@ -399,6 +402,7 @@ export default function Search() {
               ['placeholder', 'string', '—', 'Hint text inside the token input'],
               ['suffix', 'string', '—', 'Label appended after the input, e.g. "KB" or "ms"'],
               ['options', 'string[]', '—', "Allowed values — required for 'select' type"],
+              ['keywords', 'string[]', '—', 'Extra search terms that surface this token even when they don\'t match the label'],
               ['multiple', 'boolean', 'false', 'Allow this token to be added more than once'],
               ['min', 'number | string', '—', "Min constraint for 'number' and 'date' types"],
               ['max', 'number | string', '—', "Max constraint for 'number' and 'date' types"],

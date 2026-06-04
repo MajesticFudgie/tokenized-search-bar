@@ -107,6 +107,7 @@
 .tsb {
   display: flex;
   align-items: stretch;
+  position: relative;
   font-family: var(--tsb-font);
   font-size: var(--tsb-font-size);
   border: 1px solid var(--tsb-border);
@@ -139,7 +140,6 @@
   min-width: 0;
   padding: var(--tsb-padding);
   cursor: text;
-  position: relative;
 }
 
 /* ---- Main typeahead input ---- */

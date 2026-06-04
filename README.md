@@ -110,6 +110,7 @@ const [tokens, setTokens] = useState<ActiveToken[]>([
 | `placeholder` | `string` | — | Hint text inside the token input |
 | `suffix` | `string` | — | Label appended after the input, e.g. `"KB"` or `"ms"` |
 | `options` | `string[]` | — | Allowed values — required for `'select'` type |
+| `keywords` | `string[]` | — | Extra search terms that surface this token even when they don't match the label |
 | `multiple` | `boolean` | — | Allow this token to be added more than once |
 | `min` | `number \| string` | — | Min constraint for `'number'` and `'date'` types |
 | `max` | `number \| string` | — | Max constraint for `'number'` and `'date'` types |

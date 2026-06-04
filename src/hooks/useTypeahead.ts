@@ -31,7 +31,8 @@ export function useTypeahead({
 
       const matchesLabel = def.label.toLowerCase().includes(q)
       const matchesDesc = def.description?.toLowerCase().includes(q) ?? false
-      if (!matchesLabel && !matchesDesc) return false
+      const matchesKeyword = def.keywords?.some((k) => k.toLowerCase().includes(q)) ?? false
+      if (!matchesLabel && !matchesDesc && !matchesKeyword) return false
 
       if (!def.multiple) {
         const alreadyAdded = activeTokens.some((t) => t.slug === def.slug)
